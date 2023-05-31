@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="30dp"
-        android:layout_marginBottom="62dp"
+        android:layout_marginBottom="60dp"
         android:background="@color/button"
         android:text="@string/ij"
         android:textSize="20sp" />
