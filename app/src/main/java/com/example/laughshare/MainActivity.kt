@@ -9,9 +9,12 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.Request.*
 import com.android.volley.Response
+import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
@@ -19,42 +22,35 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestListener
 
 class MainActivity : AppCompatActivity() {
-    var curl:String?=null
+    private lateinit var mAdapter:Adapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val recyclerview=findViewById<RecyclerView>(R.id.recyclerview)
+        recyclerview.layoutManager= LinearLayoutManager(this)
+        mAdapter=Adapter()
+        recyclerview.adapter=mAdapter
         memecall()
-
-
-        val next=findViewById<Button>(R.id.next)
-        next.setOnClickListener{
-            memecall()
-        }
-        val share=findViewById<Button>(R.id.share)
-        share.setOnClickListener{
-            val intent= Intent(Intent.ACTION_SEND)
-            intent.type="text/plain"
-            intent.putExtra(Intent.EXTRA_TEXT,"Hey check this amazing meme $curl")
-            val chooser=Intent.createChooser(intent,"share using...")
-            startActivity(chooser)
-
-        }
     }
-    private fun memecall(){
-        val progressBar=findViewById<ProgressBar>(R.id.p)
-        progressBar.visibility=View.VISIBLE
+    private fun memecall() {
         val queue = Volley.newRequestQueue(this)
-        val url = "https://meme-api.com/gimme"
+        val url = "https://meme-api.com/gimme/20"
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
-                    curl=response.getString("url")
-                val image=findViewById<ImageView>(R.id.image)
-                Glide.with(this).load(curl).into(image)
-                progressBar.visibility=View.GONE
+                val jsonArray=response.getJSONArray("memes")
+                val memelist= ArrayList<data>()
+                for (i in 0 until jsonArray.length()) {
+                    val jsonObject=jsonArray.getJSONObject(i)
+                    val url=data(
+                        jsonObject.getString("url")
+                    )
+                    memelist.add(url)
+                }
+                mAdapter.update(memelist)
             },
             { error ->
-                progressBar.visibility=View.GONE
+
             })
         queue.add(request)
     }
