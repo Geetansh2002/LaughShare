@@ -1,4 +1,4 @@
-package com.example.laughshare
+package com.nextlevelprogrammers.laughshare
 
 import org.junit.Test
 

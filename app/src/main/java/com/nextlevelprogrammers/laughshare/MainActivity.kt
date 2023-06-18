@@ -1,4 +1,4 @@
-package com.example.laughshare
+package com.nextlevelprogrammers.laughshare
 
 import android.app.ProgressDialog
 import android.content.Intent
@@ -20,16 +20,17 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestListener
+import com.example.laughshare.R
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var mAdapter:Adapter
+    private lateinit var mAdapter: Adapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val recyclerview=findViewById<RecyclerView>(R.id.recyclerview)
         recyclerview.layoutManager= LinearLayoutManager(this)
-        mAdapter=Adapter()
+        mAdapter= Adapter()
         recyclerview.adapter=mAdapter
         memecall()
     }
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity() {
                 val memelist= ArrayList<data>()
                 for (i in 0 until jsonArray.length()) {
                     val jsonObject=jsonArray.getJSONObject(i)
-                    val url=data(
+                    val url= data(
                         jsonObject.getString("url")
                     )
                     memelist.add(url)
